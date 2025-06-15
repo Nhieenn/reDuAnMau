@@ -16,15 +16,16 @@ public class GameTimer : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //if (Instance == null)
+        //{
+        //    Instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //{
+        //    Destroy(gameObject);
+        //}
+        Instance = this;
     }
     void Start()
     {
@@ -54,6 +55,7 @@ public class GameTimer : MonoBehaviour
     {
         _startTime = Time.time;
         _currentTime = 0f;
+        _isRunning = true;
         UpdateTimerDisplay();
     }
 
@@ -82,4 +84,5 @@ public class GameTimer : MonoBehaviour
             PlayerPrefs.SetFloat("BestTime", _bestTime);
         }
     }
+
 }

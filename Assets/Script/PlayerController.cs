@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public int hearts = 1;
     public float damageInterval = 0.2f;
     private float _nextDamageTime;
-    
+
     private bool _isDead = false;
     private bool _isOnGround;
     [Header("Visual Effects")]
@@ -23,10 +23,11 @@ public class PlayerController : MonoBehaviour
     public float flashDuration = 0.2f;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
-    public float dieTimer = 1f;
+    public float dieTimer = 0.1f;
 
     private PlayerInventory inventory;
-
+    private Vector3 startPosition;
+   // public GameObject player;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -38,6 +39,9 @@ public class PlayerController : MonoBehaviour
 
         inventory = GetComponent<PlayerInventory>();
         inventory.hearts = hearts;
+        inventory.playerController = this;
+
+        startPosition = transform.position;
     }
     public static PlayerController pc;
 
@@ -79,8 +83,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_isDead || hearts <= 0) return;
 
-        hearts-=1;
+        hearts -= 1;
         inventory.hearts = hearts;
+        inventory.UpdateHeartUI();
         Debug.Log("Máu còn lại: " + hearts);
         StartCoroutine(FlashEffect());
 
@@ -89,6 +94,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Chết");
             _isDead = true;
             StartCoroutine(Die());
+            pc.Die();
         }
     }
 
@@ -117,14 +123,38 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Die()
     {
+
+        _isDead = true;
         float survivalTime = GameTimer.Instance.GetCurrentTime();
         animator.SetTrigger("Die");
         GameTimer.Instance.StopTimer();
-
+        //player.SetActive(false);
         yield return new WaitForSeconds(dieTimer);
 
         Debug.Log($"Thời gian sống: {survivalTime:F2} giây");
         GameTimer.Instance.ResetTimer();
         gameOverPanel.SetActive(true);
+        GameOverPanelScript gameOver = gameOverPanel.GetComponent<GameOverPanelScript>();
+        if (gameOver != null)
+        {
+            gameOver.ShowGameOverPanel(survivalTime);
+        }
+
+    }
+    public void ResetPlayer(Vector3 newStartPos)
+    {
+        transform.position = newStartPos;
+        rb.linearVelocity = Vector2.zero;
+        gameObject.SetActive(true);
+       // player.SetActive(true);
+        animator.Play("PlayerMove");
+        _isDead = false;
+        hearts = 3;
+
+        if (inventory != null)
+        {
+            inventory.hearts = hearts;
+            inventory.UpdateHeartUI();
+        }
     }
 }
