@@ -64,6 +64,13 @@ public class PlayerController : MonoBehaviour
                 ApplyDamage();
                 _nextDamageTime = Time.time + damageInterval;
             }
+
+
+
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            ApplyDamage();
         }
     }
 
@@ -76,7 +83,9 @@ public class PlayerController : MonoBehaviour
                 ApplyDamage();
                 _nextDamageTime = Time.time + damageInterval;
             }
+
         }
+        
     }
 
     private void ApplyDamage()
@@ -106,6 +115,14 @@ public class PlayerController : MonoBehaviour
             //_isOnGround = false;
             ResetColor();
         }
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            ResetColor();
+        }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            ResetColor();
+        }
     }
 
     private IEnumerator FlashEffect()
@@ -128,6 +145,7 @@ public class PlayerController : MonoBehaviour
         float survivalTime = GameTimer.Instance.GetCurrentTime();
         animator.SetTrigger("Die");
         GameTimer.Instance.StopTimer();
+        
         //player.SetActive(false);
         yield return new WaitForSeconds(dieTimer);
 
@@ -138,6 +156,7 @@ public class PlayerController : MonoBehaviour
         if (gameOver != null)
         {
             gameOver.ShowGameOverPanel(survivalTime);
+            Time.timeScale = 0f; // Dừng thời gian khi game over
         }
 
     }
