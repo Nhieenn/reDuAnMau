@@ -176,4 +176,20 @@ public class PlayerController : MonoBehaviour
             inventory.UpdateHeartUI();
         }
     }
+
+    public void FullReset(Vector3 newStartPos)
+    {
+        StopAllCoroutines();
+        transform.position = newStartPos;
+        rb.linearVelocity = Vector2.zero;
+        animator.Play("PlayerMove", 0, 0);
+        _isDead = false;
+        hearts = 3;
+        if (inventory != null)
+        {
+            inventory.hearts = hearts;
+            inventory.UpdateHeartUI();
+        }
+        ResetColor();
+    }
 }

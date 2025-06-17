@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
+        Time.timeScale = 1f;
+        Debug.Log("Reset game bắt đầu");
         //ẩn panel game over nếu đang hiển thị
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour
 
         //reset lại player
         if (playerController != null && playerStartPoint != null)
-            playerController.ResetPlayer(playerStartPoint.position);
+            playerController.FullReset(playerStartPoint.position);
 
         //reset và chạy lại timer
         if (GameTimer.Instance != null)
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviour
             GameTimer.Instance.ResetTimer();
             GameTimer.Instance.StartTimer();
         }
-        Time.timeScale = 1f; 
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMap");
     }
     private void Start()
     {

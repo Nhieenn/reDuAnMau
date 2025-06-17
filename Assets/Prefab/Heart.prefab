@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3142056014941316170}
   - component: {fileID: 3155868599620414958}
   - component: {fileID: 3121721133573468992}
+  - component: {fileID: 5262300645664249643}
   m_Layer: 0
   m_Name: Heart
   m_TagString: Untagged
@@ -76,8 +77,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 576634203
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -6709488594829885879, guid: 0fcf1e6da90f2ed41a086b3fff1b2f8b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -172,3 +173,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   value: 1
+--- !u!114 &5262300645664249643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 742757137897047897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8bd3f011ec67e4fb972a36b1aed8f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 6

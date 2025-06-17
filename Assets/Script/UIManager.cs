@@ -6,10 +6,12 @@ public class UIManager : MonoBehaviour
     public GameObject pauseButton;
     public GameObject pauseMenu;
     public GameObject cancelButton;
-    public GameManager gameManager;
+   
     public TextMeshProUGUI pauseTimeText;
+    [SerializeField] private GameManager gameManager;
     void Start()
     {
+        
     }
 
     void Update()
@@ -39,6 +41,7 @@ public class UIManager : MonoBehaviour
 
         if (gameManager != null)
             gameManager.ResetGame();
+        pauseButton.SetActive(true);
     }
 
     public void QuitToMenuButton()
@@ -54,4 +57,5 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(false);
         Application.Quit();
     }
+    
 }

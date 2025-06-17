@@ -15,10 +15,10 @@ public class GameOverPanelScript : MonoBehaviour
     public PlayerController playerController;
     public PlayerInventory playerInventory;
     public GameTimer gameTimer;
-    public GameManager gameManager;
-   
+    [SerializeField] private GameManager gameManager;
 
-    [Header("Restart")]
+
+ [Header("Restart")]
     private Vector3 startPosition;
     void Start()
     {
