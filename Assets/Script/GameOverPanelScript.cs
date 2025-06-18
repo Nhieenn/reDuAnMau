@@ -17,12 +17,17 @@ public class GameOverPanelScript : MonoBehaviour
     public GameTimer gameTimer;
     [SerializeField] private GameManager gameManager;
 
+    [Header("Audio")]
+    public AudioClip touchSound;
+    private AudioSource audioSource;
 
- [Header("Restart")]
+
+    [Header("Restart")]
     private Vector3 startPosition;
     void Start()
     {
         startPosition = transform.position;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -32,14 +37,16 @@ public class GameOverPanelScript : MonoBehaviour
     }
     public void CanCelButton()
     {
+        audioSource.PlayOneShot(touchSound);
 
-        
         gameoverPanel.SetActive(false);
         Time.timeScale = 1f; // Reset time scale to normal
 
     }
     public void RestartButton()
     {
+        audioSource.PlayOneShot(touchSound);
+
         Time.timeScale = 1f;
         gameoverPanel.SetActive(false);
 
@@ -49,6 +56,8 @@ public class GameOverPanelScript : MonoBehaviour
 
     public void MainMenuButton()
     {
+        audioSource.PlayOneShot(touchSound);
+
         Time.timeScale = 1f;
         gameoverPanel.SetActive(false);
 
@@ -60,13 +69,17 @@ public class GameOverPanelScript : MonoBehaviour
     }
     public void QuitButton()
     {
+        audioSource.PlayOneShot(touchSound);
+
         gameoverPanel.SetActive(false);
       
         Application.Quit();
     }
     public void ShowGameOverPanel(float timeSurvived)
     {
-       // Debug.Log("ShowGameOverPanel gọi với thời gian: " + timeSurvived);
+        audioSource.PlayOneShot(touchSound);
+
+        // Debug.Log("ShowGameOverPanel gọi với thời gian: " + timeSurvived);
         gameoverPanel.SetActive(true);
         gameoverText.text = "Game Over";
 

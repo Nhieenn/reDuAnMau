@@ -9,9 +9,12 @@ public class UIManager : MonoBehaviour
    
     public TextMeshProUGUI pauseTimeText;
     [SerializeField] private GameManager gameManager;
+
+    private AudioSource audioSource;
+    public AudioClip touchSound;
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -20,6 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void PauseButton()
     {
+        audioSource.PlayOneShot(touchSound);
         Time.timeScale = 0f;
         pauseButton.SetActive(false);
         pauseMenu.SetActive(true);
@@ -29,6 +33,7 @@ public class UIManager : MonoBehaviour
 
     public void ResumeButton()
     {
+        audioSource.PlayOneShot(touchSound);
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         pauseButton.SetActive(true);
@@ -36,6 +41,7 @@ public class UIManager : MonoBehaviour
 
     public void PlayAgainButton()
     {
+        audioSource.PlayOneShot(touchSound);
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
 
@@ -46,6 +52,7 @@ public class UIManager : MonoBehaviour
 
     public void QuitToMenuButton()
     {
+        audioSource.PlayOneShot(touchSound);
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         UnityEngine.SceneManagement.SceneManager.LoadScene("Home");
@@ -53,6 +60,7 @@ public class UIManager : MonoBehaviour
 
     public void QuitGameButton()
     {
+        audioSource.PlayOneShot(touchSound);
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         Application.Quit();

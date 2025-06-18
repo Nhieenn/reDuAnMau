@@ -3,6 +3,11 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Sound Effects")]
+    public AudioClip jumpSound;
+    public AudioClip damageSound;
+    private AudioSource audioSource;
+    private AudioSource damageSoundSource;
     [Header("Game Objects")]
     public GameObject gameOverPanel;
 
@@ -42,6 +47,11 @@ public class PlayerController : MonoBehaviour
         inventory.playerController = this;
 
         startPosition = transform.position;
+
+
+        rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+        damageSoundSource = GetComponent<AudioSource>();
     }
     public static PlayerController pc;
 
@@ -51,6 +61,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             //animator.SetTrigger("Jump");
+            audioSource.PlayOneShot(jumpSound);
         }
     }
 
@@ -90,6 +101,7 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyDamage()
     {
+        damageSoundSource.PlayOneShot(damageSound);
         if (_isDead || hearts <= 0) return;
 
         hearts -= 1;
@@ -140,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator Die()
     {
-
+        
         _isDead = true;
         float survivalTime = GameTimer.Instance.GetCurrentTime();
         animator.SetTrigger("Die");
