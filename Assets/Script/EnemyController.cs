@@ -21,17 +21,17 @@ public class EnemyController : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        if (distanceToPlayer <= attackRange)
-        {
-            Debug.Log("người chơi trong phạm vi");
-            rb.linearVelocity = Vector2.zero;  // dừng di chuyển khi tấn công
-            animator.SetBool("IsAttacking", true);
-        }
-        else
-        {
-            rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
-            animator.SetBool("IsAttacking", false);
-        }
+        //if (distanceToPlayer <= attackRange)
+        //{
+        //    //Debug.Log("người chơi trong phạm vi");
+        //    rb.linearVelocity = Vector2.zero;  // dừng di chuyển khi tấn công
+        //    animator.SetBool("IsAttacking", true);
+        //}
+        //else
+        //{
+        //    rb.linearVelocity = new Vector2(-moveSpeed, rb.linearVelocity.y);
+        //    animator.SetBool("IsAttacking", false);
+        //}
     }
 
     private void Update()

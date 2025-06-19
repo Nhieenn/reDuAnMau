@@ -5,7 +5,7 @@ using TMPro;
 public class PlayerInventory : MonoBehaviour
 {
     [Header("UI References")]
-    public TMP_Text goldText;
+   // public TMP_Text goldText;
     public TMP_Text heartText;
 
   //  public int gold = 0;

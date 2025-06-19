@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip jumpSound;
     public AudioClip damageSound;
     private AudioSource audioSource;
-    private AudioSource damageSoundSource;
+
     [Header("Game Objects")]
     public GameObject gameOverPanel;
 
@@ -17,12 +17,12 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 
     [Header("Damage System")]
-    public int hearts = 1;
+    public int hearts = 3;
     public float damageInterval = 0.2f;
-    private float _nextDamageTime;
+    private float nextDamageTime;
 
-    private bool _isDead = false;
-    private bool _isOnGround;
+    private bool isDead = false;
+
     [Header("Visual Effects")]
     public Color flashColor = Color.red;
     public float flashDuration = 0.2f;
@@ -32,35 +32,30 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInventory inventory;
     private Vector3 startPosition;
-   // public GameObject player;
-    void Start()
+
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
         originalColor = spriteRenderer.color;
-        _nextDamageTime = Time.time; // Khởi tạo thời gian
-
+        nextDamageTime = Time.time;
 
         inventory = GetComponent<PlayerInventory>();
         inventory.hearts = hearts;
         inventory.playerController = this;
 
         startPosition = transform.position;
-
-
-        rb = GetComponent<Rigidbody2D>();
-        audioSource = GetComponent<AudioSource>();
-        damageSoundSource = GetComponent<AudioSource>();
     }
-    public static PlayerController pc;
 
     void Update()
     {
+        if (isDead) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            //animator.SetTrigger("Jump");
             audioSource.PlayOneShot(jumpSound);
         }
     }
@@ -69,16 +64,13 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            //_isOnGround = true;
-            if (Time.time >= _nextDamageTime)
+            if (Time.time >= nextDamageTime)
             {
                 ApplyDamage();
-                _nextDamageTime = Time.time + damageInterval;
+                nextDamageTime = Time.time + damageInterval;
             }
-
-
-
         }
+
         if (collision.gameObject.CompareTag("Enemy"))
         {
             ApplyDamage();
@@ -89,21 +81,19 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            if (Time.time >= _nextDamageTime)
+            if (Time.time >= nextDamageTime)
             {
                 ApplyDamage();
-                _nextDamageTime = Time.time + damageInterval;
+                nextDamageTime = Time.time + damageInterval;
             }
-
         }
-        
     }
 
     private void ApplyDamage()
     {
-        damageSoundSource.PlayOneShot(damageSound);
-        if (_isDead || hearts <= 0) return;
+        if (isDead || hearts <= 0) return;
 
+        audioSource.PlayOneShot(damageSound);
         hearts -= 1;
         inventory.hearts = hearts;
         inventory.UpdateHeartUI();
@@ -113,27 +103,7 @@ public class PlayerController : MonoBehaviour
         if (hearts <= 0)
         {
             Debug.Log("Chết");
-            _isDead = true;
             StartCoroutine(Die());
-            pc.Die();
-        }
-    }
-
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            //_isOnGround = false;
-            ResetColor();
-        }
-        if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            ResetColor();
-        }
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            ResetColor();
         }
     }
 
@@ -141,52 +111,49 @@ public class PlayerController : MonoBehaviour
     {
         spriteRenderer.color = flashColor;
         yield return new WaitForSeconds(flashDuration);
-        //if (!_isOnGround) spriteRenderer.color = originalColor;
         spriteRenderer.color = originalColor;
-    }
-
-    private void ResetColor()
-    {
-        if (!_isOnGround) spriteRenderer.color = originalColor;
     }
 
     private IEnumerator Die()
     {
-        
-        _isDead = true;
+        isDead = true;
+
         float survivalTime = GameTimer.Instance.GetCurrentTime();
         animator.SetTrigger("Die");
         GameTimer.Instance.StopTimer();
-        
-        //player.SetActive(false);
-        yield return new WaitForSeconds(dieTimer);
+
+        yield return new WaitForSecondsRealtime(dieTimer);
 
         Debug.Log($"Thời gian sống: {survivalTime:F2} giây");
         GameTimer.Instance.ResetTimer();
-        gameOverPanel.SetActive(true);
-        GameOverPanelScript gameOver = gameOverPanel.GetComponent<GameOverPanelScript>();
-        if (gameOver != null)
+
+        if (gameOverPanel != null)
         {
-            gameOver.ShowGameOverPanel(survivalTime);
-            Time.timeScale = 0f; // Dừng thời gian khi game over
+            gameOverPanel.SetActive(true);
+            GameOverPanelScript gameOver = gameOverPanel.GetComponent<GameOverPanelScript>();
+            if (gameOver != null)
+            {
+                gameOver.ShowGameOverPanel(survivalTime);
+            }
         }
 
+        Time.timeScale = 0f;
+        StartCoroutine(FadeOutAudio(4.5f)); // Thêm fade out âm thanh trong 2 giây
     }
-    public void ResetPlayer(Vector3 newStartPos)
-    {
-        transform.position = newStartPos;
-        rb.linearVelocity = Vector2.zero;
-        gameObject.SetActive(true);
-       // player.SetActive(true);
-        animator.Play("PlayerMove");
-        _isDead = false;
-        hearts = 3;
 
-        if (inventory != null)
+    private IEnumerator FadeOutAudio(float duration)
+    {
+        float startVolume = AudioListener.volume;
+        float t = 0f;
+
+        while (t < duration)
         {
-            inventory.hearts = hearts;
-            inventory.UpdateHeartUI();
+            t += Time.unscaledDeltaTime;
+            AudioListener.volume = Mathf.Lerp(startVolume, 0f, t / duration);
+            yield return null;
         }
+
+        AudioListener.volume = 0f;
     }
 
     public void FullReset(Vector3 newStartPos)
@@ -195,13 +162,19 @@ public class PlayerController : MonoBehaviour
         transform.position = newStartPos;
         rb.linearVelocity = Vector2.zero;
         animator.Play("PlayerMove", 0, 0);
-        _isDead = false;
+        isDead = false;
         hearts = 3;
+
         if (inventory != null)
         {
             inventory.hearts = hearts;
             inventory.UpdateHeartUI();
         }
-        ResetColor();
+
+        spriteRenderer.color = originalColor;
+
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        AudioListener.volume = 1f;
     }
 }

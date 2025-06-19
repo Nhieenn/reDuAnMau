@@ -25,7 +25,7 @@ public class ItemCollector : MonoBehaviour
             {
                 inventory.AddItem(type, value);
 
-                Destroy(gameObject);
+                Destroy(gameObject, collectSound.length);
             }
         }
     }

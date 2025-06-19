@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,32 +9,54 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public Transform playerStartPoint;
 
+    private void Start()
+    {
+        // Không tự động reset ngay khi Start()
+        // Chỉ khởi tạo nếu cần
+        Debug.Log("GameManager khởi động xong.");
+    }
+
+    // Hàm gọi khi nhấn nút Play mới
+    public void StartNewGame()
+    {
+        Debug.Log("Bắt đầu game mới");
+        ResetGame();
+    }
+
+    // Hàm reset thông số nội bộ trong scene hiện tại
     public void ResetGame()
     {
         Time.timeScale = 1f;
         Debug.Log("Reset game bắt đầu");
-        //ẩn panel game over nếu đang hiển thị
+
         if (gameOverPanel != null)
             gameOverPanel.SetActive(false);
 
-        //reset máu về mặc định
         if (playerInventory != null)
             playerInventory.ResetHearts();
 
-        //reset lại player
         if (playerController != null && playerStartPoint != null)
             playerController.FullReset(playerStartPoint.position);
 
-        //reset và chạy lại timer
         if (GameTimer.Instance != null)
         {
             GameTimer.Instance.ResetTimer();
             GameTimer.Instance.StartTimer();
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMap");
     }
-    private void Start()
+
+    // Hàm gọi khi về menu
+    public void ReturnToMenu()
     {
-        ResetGame();
+        Time.timeScale = 1f;
+        Debug.Log("Quay về MainMenu");
+        SceneManager.LoadScene("Home");
+    }
+
+    // Hàm quit game
+    public void QuitGame()
+    {
+        Debug.Log("Thoát game");
+        Application.Quit();
     }
 }

@@ -77,7 +77,7 @@ public class GameOverPanelScript : MonoBehaviour
     }
     public void ShowGameOverPanel(float timeSurvived)
     {
-        audioSource.PlayOneShot(touchSound);
+       // audioSource.PlayOneShot(touchSound);
 
         // Debug.Log("ShowGameOverPanel gọi với thời gian: " + timeSurvived);
         gameoverPanel.SetActive(true);
