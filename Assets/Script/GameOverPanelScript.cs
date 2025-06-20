@@ -12,6 +12,7 @@ public class GameOverPanelScript : MonoBehaviour
     public TextMeshProUGUI time;
     public TextMeshProUGUI gameoverText;
     public GameObject gameoverPanel;
+    public GameObject jumpButton;
     public PlayerController playerController;
     public PlayerInventory playerInventory;
     public GameTimer gameTimer;
@@ -41,6 +42,7 @@ public class GameOverPanelScript : MonoBehaviour
 
         gameoverPanel.SetActive(false);
         Time.timeScale = 1f; // Reset time scale to normal
+        jumpButton.SetActive(true); 
 
     }
     public void RestartButton()
@@ -52,6 +54,7 @@ public class GameOverPanelScript : MonoBehaviour
 
         if (gameManager != null)
             gameManager.ResetGame();
+        jumpButton.SetActive(true);
     }
 
     public void MainMenuButton()
@@ -81,6 +84,7 @@ public class GameOverPanelScript : MonoBehaviour
 
         // Debug.Log("ShowGameOverPanel gọi với thời gian: " + timeSurvived);
         gameoverPanel.SetActive(true);
+        jumpButton.SetActive(false);
         gameoverText.text = "Game Over";
 
         time.text =  timeSurvived.ToString("F2");

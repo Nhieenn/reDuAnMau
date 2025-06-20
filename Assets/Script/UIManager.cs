@@ -6,7 +6,8 @@ public class UIManager : MonoBehaviour
     public GameObject pauseButton;
     public GameObject pauseMenu;
     public GameObject cancelButton;
-   
+    public GameObject jumpButton;
+
     public TextMeshProUGUI pauseTimeText;
     [SerializeField] private GameManager gameManager;
 
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
         pauseMenu.SetActive(true);
         float currentTime = GameTimer.Instance.GetCurrentTime(); // lấy thời gian
         pauseTimeText.text =  currentTime.ToString("F2"); 
+        jumpButton.SetActive(false); 
     }
 
     public void ResumeButton()
@@ -37,6 +39,8 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         pauseButton.SetActive(true);
+        jumpButton.SetActive(true);
+
     }
 
     public void PlayAgainButton()
@@ -48,6 +52,7 @@ public class UIManager : MonoBehaviour
         if (gameManager != null)
             gameManager.ResetGame();
         pauseButton.SetActive(true);
+        jumpButton.SetActive(true);
     }
 
     public void QuitToMenuButton()
@@ -56,6 +61,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         UnityEngine.SceneManagement.SceneManager.LoadScene("Home");
+
     }
 
     public void QuitGameButton()

@@ -18,6 +18,7 @@ public class HomeManager : MonoBehaviour
     public GameObject cancelGuid;
     public GameObject cancelCredit;
     public GameObject bestScoreButton;
+    public GameObject bgMusic;
 
 
     // Start is called once before the firt execution of Update after the MonoBehaviour is created
@@ -25,7 +26,7 @@ public class HomeManager : MonoBehaviour
     {
         float bestScore = PlayerPrefs.GetFloat("BestScore", 0f);
         bestScoreTime.text =  bestScore.ToString("F2");
-
+        bgMusic.SetActive(true);
     }
 
     // Update is called once per frame
@@ -37,7 +38,8 @@ public class HomeManager : MonoBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("MainMap");
         Time.timeScale = 1f;
-       // GamgameoverPanel.SetActive(false);
+        bgMusic.SetActive(false);
+        // GamgameoverPanel.SetActive(false);
 
         //if (gameManager != null)
         //    gameManager.ResetGame();

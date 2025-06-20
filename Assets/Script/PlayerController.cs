@@ -177,4 +177,12 @@ public class PlayerController : MonoBehaviour
         AudioListener.pause = false;
         AudioListener.volume = 1f;
     }
+
+    public void Jump()
+    {
+        if (isDead) return;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        audioSource.PlayOneShot(jumpSound);
+    }
+
 }
